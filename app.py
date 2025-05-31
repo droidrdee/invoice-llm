@@ -4,21 +4,17 @@ from PIL import Image
 import pytesseract
 import google.generativeai as genai
 
-# --- Configuration ---
-# Set the path to the Tesseract executable if it's not in your PATH
-# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe' # Example for Windows
 
-# Configure Google Gemini API (REPLACE WITH YOUR ACTUAL API KEY)
 genai.configure(api_key="YOUR_GEMINI_API_KEY") 
 model = genai.GenerativeModel('gemini-pro')
 
-# --- Flask App Setup ---
+
 app = Flask(__name__)
-# Change UPLOAD_FOLDER to be inside static
+
 app.config['UPLOAD_FOLDER'] = 'static/uploads' 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-# --- Helper Functions ---
+
 def extract_text_from_image(image_path):
     """
     Uses Tesseract OCR to extract text from an image.
@@ -84,9 +80,9 @@ def upload_file():
         # 2. LLM Processing
         extracted_data = process_with_gemini(extracted_text)
 
-        # Pass only the filename for static URL generation
+    
         return render_template('results.html', 
-                               invoice_image_filename=file.filename, # Changed variable name
+                               invoice_image_filename=file.filename, 
                                extracted_text=extracted_text,
                                extracted_data=extracted_data)
     return redirect(url_for('index'))
